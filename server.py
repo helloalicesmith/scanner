@@ -1,14 +1,15 @@
 import socket
 import struct
 import threading
+import binascii
+from mac_vendor_lookup import MacLookup
 
-class Server(threading.Thread):
+from ssocket import Socket
+
+class Server(threading.Thread, Socket):
     def __init__(self):
-        super().__init__()
-        s = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.htons(0x0806))
-        s.bind(('wlan0', 0))
-        s.settimeout(3)
-        self.raw_socket = s
+        Socket.__init__(self)
+        threading.Thread.__init__(self)
 
     def run(self):
         while True:
@@ -21,13 +22,13 @@ class Server(threading.Thread):
                 arp_header = data[14:42]
                 arp_detailed = struct.unpack("2s2s1s1s2s6s4s6s4s", arp_header)
 
-                print(arp_detailed[5])
+                print(binascii.hexlify(arp_detailed[5]))
                 # print(binascii.hexlify(arp_detailed[5]).decode("utf-8"))
                 # print(MacLookup().lookup(binascii.hexlify(arp_detailed[5]).decode("utf-8")))
 
                 src_ip = socket.inet_ntoa(arp_detailed[6])
                 print(src_ip, socket.inet_ntoa(arp_detailed[8]))
                 # s.settimeout(old_timeout) # Restore
-            except:
-                print('end')
+            except ValueError:
+                print('end', ValueError)
                 break
