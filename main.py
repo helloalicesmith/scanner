@@ -1,35 +1,42 @@
 import socket
 import struct
 import binascii
-import os
+import time
+import asyncio
+import sched
+import time
 from uuid import getnode as get_mac
+from threading import Thread
+from functools import partial
+from mac_vendor_lookup import MacLookup
+import time
 
-from scanner.settings import settings
-from scanner.utils.utils import get_arp_datagram, get_hardware_hex, get_interface_card
+from server import Server
+from client import client
 
-interface = get_interface_card()
+client()
+thread = Server().run()
+# thread.start()
+# print(thread.is_alive)
 
-with socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.htons(0x0806)) as s:
-    s.bind(('wlan0', 0))
+#
+# print('from recv_socket')
+# # old_timeout = s.gettimeout()
+# # s.settimeout(5)
 
-    for i in range(255):
-        # TODO 
-        destination = f'192.168.0.{i}'
-
-        arp_d = get_arp_datagram(destination, get_hardware_hex(settings.mac))
-        s.send(arp_d)
-
-
-    while True:
-        data = s.recv(42)
-    
-        ethernet_header = data[0:14]
-        ethernet_detailed = struct.unpack("!6s6s2s", ethernet_header)
-    
-        arp_header = data[14:42]
-        arp_detailed = struct.unpack("2s2s1s1s2s6s4s6s4s", arp_header)
-    
-    
-        src_ip = socket.inet_ntoa(arp_detailed[6])
-        print(socket.inet_ntoa(arp_detailed[6]), socket.inet_ntoa(arp_detailed[8]))
+# while True:
+#     data = s.recv(42)
+# 
+#     ethernet_header = data[0:14]
+#     ethernet_detailed = struct.unpack("!6s6s2s", ethernet_header)
+# 
+#     arp_header = data[14:42]
+#     arp_detailed = struct.unpack("2s2s1s1s2s6s4s6s4s", arp_header)
+# 
+# 
+#     src_ip = socket.inet_ntoa(arp_detailed[6])
+#     print(socket.inet_ntoa(arp_detailed[6]), socket.inet_ntoa(arp_detailed[8]))
+#
+#     time.sleep(1)
+#     break
 

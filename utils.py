@@ -1,7 +1,7 @@
 import socket
 import os
 
-from ..constants import *
+from constants import *
 
 def get_hardware_hex(hex: str):
     return hex.replace(':', '')
