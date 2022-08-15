@@ -11,6 +11,18 @@ class Server(threading.Thread, Socket):
         Socket.__init__(self)
         threading.Thread.__init__(self)
 
+    def bytes_to_mac_vendor(self, bytes):
+        hex = binascii.hexlify(bytes).decode('utf-8')
+        result = ''
+
+        for x in range(len(hex)):
+            result += hex[x]
+
+            if (x + 1) % 2 == 0 and x != len(hex) - 1:
+                result += ':'
+
+        return result
+
     def run(self):
         while True:
             try:
@@ -22,13 +34,8 @@ class Server(threading.Thread, Socket):
                 arp_header = data[14:42]
                 arp_detailed = struct.unpack("2s2s1s1s2s6s4s6s4s", arp_header)
 
-                print(binascii.hexlify(arp_detailed[5]))
-                # print(binascii.hexlify(arp_detailed[5]).decode("utf-8"))
-                # print(MacLookup().lookup(binascii.hexlify(arp_detailed[5]).decode("utf-8")))
-
+                mac = self.bytes_to_mac_vendor(arp_detailed[5])
                 src_ip = socket.inet_ntoa(arp_detailed[6])
-                print(src_ip, socket.inet_ntoa(arp_detailed[8]))
-                # s.settimeout(old_timeout) # Restore
-            except ValueError:
-                print('end', ValueError)
+                print(MacLookup().lookup(mac), mac, src_ip)
+            except TimeoutError:
                 break

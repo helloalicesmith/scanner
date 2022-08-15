@@ -7,3 +7,4 @@ thread.start()
 client = Client()
 client.send()
 
+thread.join()
