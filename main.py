@@ -1,10 +1,14 @@
 from server import Server
 from client import Client
 
-thread = Server()
-thread.start()
+def main():
+    thread = Server()
+    thread.start()
 
-client = Client()
-client.send()
+    client = Client()
+    client.send()
 
-thread.join()
+    thread.join()
+
+if __name__ == '__main__':
+    main()
