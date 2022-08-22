@@ -1,6 +1,6 @@
-arp_code = b'\x08\x06'  # Код протокола
-htype = b'\x00\x01'  # Hardware Type
-ptype = b'\x08\x00'  # Protocol Type
-hlen = b'\x06'  # Hardware Length
-plen = b'\x04'  # Protocol Length
-operation = b'\x00\x01'  # Operation Code - Ответ
+arp_code = b'\x08\x06'
+htype = b'\x00\x01'
+ptype = b'\x08\x00'
+hlen = b'\x06'
+plen = b'\x04'
+operation = b'\x00\x01'

@@ -2,14 +2,15 @@ import socket
 import struct
 import threading
 import binascii
-from mac_vendor_lookup import MacLookup
 
+from mac_vendor_lookup import MacLookup
 from ssocket import Socket
 
 class Server(threading.Thread, Socket):
     def __init__(self):
         Socket.__init__(self)
         threading.Thread.__init__(self)
+        self.result = {}
 
     def bytes_to_mac_vendor(self, bytes):
         hex = binascii.hexlify(bytes).decode('utf-8')
@@ -22,6 +23,11 @@ class Server(threading.Thread, Socket):
                 result += ':'
 
         return result
+
+    def save(self, vendor, src_ip):
+        self.result[vendor] = src_ip
+
+        return self.result
 
     def run(self):
         while True:
@@ -36,6 +42,9 @@ class Server(threading.Thread, Socket):
 
                 mac = self.bytes_to_mac_vendor(arp_detailed[5])
                 src_ip = socket.inet_ntoa(arp_detailed[6])
-                print(MacLookup().lookup(mac), mac, src_ip)
+
+                # self.save(MacLookup().lookup(mac), src_ip)
+                self.save(mac, src_ip)
+                # print(MacLookup().lookup(mac), mac, src_ip)
             except TimeoutError:
                 break

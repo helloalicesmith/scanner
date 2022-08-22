@@ -8,7 +8,6 @@ class Client(Socket):
          for x in range(2, 150):
             arp_d = get_arp_datagram(f'192.168.0.{x}', get_hardware_hex(settings.mac))
             self.raw_socket.send(arp_d)
-            if x % 4 == 0:
-                time.sleep(0.035)
+            time.sleep(0.03)
 
 
