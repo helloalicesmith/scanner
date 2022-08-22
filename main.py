@@ -4,13 +4,12 @@ from mac_vendor_lookup import MacLookup
 from server import Server
 from client import Client
 
-#TODO
 def main(argv):
     # MacLookup().update_vendors()
     server = Server()
     server.start()
 
-    client = Client()
+    client = Client(argv[1])
     client.send()
 
     server.join()
