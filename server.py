@@ -4,7 +4,7 @@ import threading
 import binascii
 
 from mac_vendor_lookup import MacLookup
-from ssocket import Socket
+from socket_ import Socket
 
 
 class Server(threading.Thread, Socket):

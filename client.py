@@ -3,7 +3,7 @@ import ipaddress
 
 from settings import settings
 from utils import get_arp_datagram, get_hardware_hex
-from ssocket import Socket
+from socket_ import Socket
 
 
 class Client(Socket):
