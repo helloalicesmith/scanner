@@ -6,6 +6,7 @@ import binascii
 from mac_vendor_lookup import MacLookup
 from ssocket import Socket
 
+
 class Server(threading.Thread, Socket):
     def __init__(self):
         Socket.__init__(self)
